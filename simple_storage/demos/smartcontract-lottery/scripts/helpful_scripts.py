@@ -6,11 +6,11 @@ from brownie import (
     VRFCoordinatorMock,
     LinkToken,
     Contract,
-    Interface
+    interface
 )
 
-FORKED_LOCAL_ENVIRONMENT = ["goerli", "ganache-local"]
-LOCAL_BLOCKCHAIN_ENVIRONMENTS = ["mainnet-fork", "development", "Ganache-CLI"]
+FORKED_LOCAL_ENVIRONMENT = ["goerli", "mainnet-fork"]
+LOCAL_BLOCKCHAIN_ENVIRONMENTS = ["ganache-local", "development", "Ganache-CLI"]
 
 def get_account(index=None, id=None):
     if index:
@@ -28,7 +28,7 @@ def get_account(index=None, id=None):
 
 contract_to_mock = {
     "eth_usd_price_feed": MockV3Aggregator,
-    "vfr_coordinator": VRFCoordinatorMock,
+    "vrf_coordinator": VRFCoordinatorMock,
     "link_token": LinkToken,
 }
 
