@@ -1,7 +1,15 @@
-from brownie import network, config, accounts, MockV3Aggregator, Contract
+from brownie import (
+    network, 
+    config, 
+    accounts, 
+    MockV3Aggregator, 
+    VRFCoordinatorMock,
+    LinkToken,
+    Contract
+)
 
-FORKED_LOCAL_ENVIRONMENT = []
-LOCAL_BLOCKCHAIN_ENVIRONMENTS = []
+FORKED_LOCAL_ENVIRONMENT = ["goerli", "ganache-local"]
+LOCAL_BLOCKCHAIN_ENVIRONMENTS = ["mainnet-fork", "development", "Ganache-CLI"]
 
 def get_account(index=None, id=None):
     if index:
@@ -19,12 +27,13 @@ def get_account(index=None, id=None):
 
 contract_to_mock = {
     "eth_usd_price_feed": MockV3Aggregator,
-    "vfr_coordinator": VRFCoordinator
+    "vfr_coordinator": VRFCoordinatorMock,
+    "link_token": LinkToken,
 }
 
-def get_contract():
+def get_contract(contract_name):
     """ This function will grab the contract addresses from brownie config if 
-    defined, otherwise, it will deploy  amock version of that contract, and 
+    defined, otherwise, it will deploy a mock version of that contract, and 
     return that mock contract.
         Args:
             contract_name(string) 
@@ -54,4 +63,6 @@ def deploy_mocks(decimals=DECIMALS, initial_value=INITIAL_VALUE):
     MockV3Aggregator.deploy(
         decimals, initial_value, {"from": account}
     )
+    link_token = LinkToken.deploy({"from": account})
+    VRFCoordinatorMock.deploy(link_token.address, {"from": account})
     print("Deployed")
